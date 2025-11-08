@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
-    "postinstall": "playwright install --with-deps chromium",
+    "postinstall": "playwright install chromium",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "test": "vitest",
