@@ -73,7 +73,7 @@ export default function RegisterPage() {
         // Use window.location for reliable redirect (ensures full page reload)
         window.location.href = '/dashboard'
       }
-    } catch (error) {
+    } catch {
       toast({
         title: 'Błąd',
         description: 'Wystąpił nieoczekiwany błąd',

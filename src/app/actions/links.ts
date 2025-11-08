@@ -3,7 +3,7 @@
 import { createServerActionClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { createLinkSchema, updateLinkSchema, deleteLinkSchema } from '@/lib/validations/links'
-import { scrapeUrl, isUrlScrapable } from '@/lib/scraping/playwright'
+import { smartScrapeUrl, isUrlScrapable } from '@/lib/scraping'
 import { generateDescriptionAndTags, isAIEnabled } from '@/lib/ai/openrouter'
 import type { z } from 'zod'
 import { generateNewTags } from '@/lib/ai/openrouter'
@@ -169,7 +169,7 @@ export async function createLink(formData: FormData) {
   try {
     console.log(`Starting synchronous scraping for URL: ${url}`)
     const startTime = new Date()
-    scrapedData = await scrapeUrl(url, { timeout: 30000 })
+    scrapedData = await smartScrapeUrl(url, { timeout: 30000 })
     const endTime = new Date()
     const duration = endTime.getTime() - startTime.getTime()
     console.log(`Scraping completed in ${duration}ms`)
