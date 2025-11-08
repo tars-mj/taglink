@@ -181,7 +181,8 @@ export async function createLink(formData: FormData) {
   // AI Processing: Generate description and suggest tags
   let aiDescription = scrapedData?.success ? (scrapedData.description || scrapedData.ogDescription) : null
   let suggestedTagIds: string[] = []
-  let aiProcessingError = scrapedData?.success ? null : (scrapedData?.error || scrapingError || 'Scraping failed')
+  // Truncate error immediately to prevent database overflow (varchar(500) limit)
+  let aiProcessingError = scrapedData?.success ? null : truncateString(scrapedData?.error || scrapingError || 'Scraping failed', 500)
 
   if (scrapedData?.success && isAIEnabled()) {
     try {
@@ -215,7 +216,7 @@ export async function createLink(formData: FormData) {
         console.log(`AI description generated: ${aiDescription.substring(0, 50)}...`)
       } else {
         console.warn(`AI description failed: ${aiResult.description.error}`)
-        aiProcessingError = aiProcessingError || aiResult.description.error
+        aiProcessingError = aiProcessingError || truncateString(aiResult.description.error, 500)
       }
 
       // Store suggested tag IDs for assignment
@@ -256,7 +257,7 @@ export async function createLink(formData: FormData) {
       }
     } catch (error) {
       console.error('AI processing error:', error)
-      aiProcessingError = error instanceof Error ? error.message : 'AI processing failed'
+      aiProcessingError = truncateString(error instanceof Error ? error.message : 'AI processing failed', 500)
     }
   } else if (!isAIEnabled()) {
     console.log('AI service is not enabled')
@@ -275,7 +276,7 @@ export async function createLink(formData: FormData) {
     ai_processing_status: scrapedData?.success ? 'completed' : 'failed',
     ai_processing_started_at: new Date().toISOString(),
     ai_processing_completed_at: new Date().toISOString(),
-    ai_processing_error: truncateString(aiProcessingError, 500), // DB limit: varchar(500)
+    ai_processing_error: aiProcessingError, // Already truncated above
   }
 
   // Insert link with all metadata already populated

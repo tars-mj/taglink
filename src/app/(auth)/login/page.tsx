@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -71,7 +71,7 @@ export default function LoginPage() {
         // Use window.location for reliable redirect (ensures full page reload)
         window.location.href = '/dashboard'
       }
-    } catch (error) {
+    } catch {
       toast({
         title: 'Błąd',
         description: 'Wystąpił nieoczekiwany błąd',
@@ -135,5 +135,25 @@ export default function LoginPage() {
         </CardFooter>
       </form>
     </Card>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <Card className="backdrop-blur-lg bg-white/90">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl text-center">
+            <span className="text-gradient font-bold">TagLink</span>
+          </CardTitle>
+          <CardDescription className="text-center">
+            Ładowanie...
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="h-64" />
+      </Card>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
