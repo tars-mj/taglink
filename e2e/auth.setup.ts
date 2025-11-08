@@ -43,7 +43,7 @@ setup('authenticate', async ({ page }) => {
     const testEmail = process.env.E2E_TEST_EMAIL || 'test@example.com'
     const testPassword = process.env.E2E_TEST_PASSWORD || 'testpassword123'
 
-    console.log('Attempting to login with:', testEmail)
+    console.log('Attempting to login...')
 
     // Fill in the form (support both Polish and English labels)
     await page.getByLabel(/email|e-mail/i).fill(testEmail)
