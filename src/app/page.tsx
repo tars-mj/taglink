@@ -36,7 +36,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-2 bg-linear-to-r from-purple-600 to-blue-500 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-600 transition-all transform hover:scale-105"
+                className="hidden sm:inline-flex px-4 py-2 bg-linear-to-r from-purple-600 to-blue-500 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-600 transition-all transform hover:scale-105"
               >
                 Rozpocznij za darmo
               </Link>
@@ -214,7 +214,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-12">
             {/* Step 1 */}
-            <div className="relative">
+            <div className="relative ml-6 md:ml-0">
               <div className="absolute -top-4 -left-4 w-12 h-12 bg-linear-to-br from-purple-600 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
                 1
               </div>
@@ -232,7 +232,7 @@ export default function HomePage() {
             </div>
 
             {/* Step 2 */}
-            <div className="relative">
+            <div className="relative ml-6 md:ml-0">
               <div className="absolute -top-4 -left-4 w-12 h-12 bg-linear-to-br from-blue-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
                 2
               </div>
@@ -250,7 +250,7 @@ export default function HomePage() {
             </div>
 
             {/* Step 3 */}
-            <div className="relative">
+            <div className="relative ml-6 md:ml-0">
               <div className="absolute -top-4 -left-4 w-12 h-12 bg-linear-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
                 3
               </div>
