@@ -1,0 +1,212 @@
+[
+  {
+    "url": "https://deepmind.google/blog/mapping-modeling-and-understanding-nature-with-ai/",
+    "title": "Mapping, modeling, and understanding nature with AI",
+    "description": "Jak modele wizji, bioakustyki i nowe benchmarki pomagają przewidywać wylesianie i mapować zasięgi gatunków.",
+    "tags": ["ai", "climate-tech", "vision-transformers", "research"],
+    "rating": 4
+  },
+  {
+    "url": "https://deepmind.google/blog/bringing-ai-to-the-next-generation-of-fusion-energy/",
+    "title": "Bringing AI to the next generation of fusion energy",
+    "description": "Partnerstwo z Commonwealth Fusion Systems: wykorzystanie RL i sterowania do przyspieszenia badań nad fuzją.",
+    "tags": ["ai", "energy", "reinforcement-learning", "robotics"],
+    "rating": null
+  },
+  {
+    "url": "https://research.google/blog/ai-as-a-research-partner-advancing-theoretical-computer-science-with-alphaevolve/",
+    "title": "AI as a research partner: Advancing theoretical computer science with AlphaEvolve",
+    "description": "Agent LLM pomaga odkrywać i weryfikować struktury kombinatoryczne w TCS.",
+    "tags": ["ai", "agents", "theory", "research"],
+    "rating": 2
+  },
+  {
+    "url": "https://blog.google/technology/google-deepmind/ai-for-math/",
+    "title": "Accelerating discovery with the AI for Math Initiative",
+    "description": "Inicjatywa łącząca zespoły matematyczne z narzędziami AI, aby przyspieszać odkrycia.",
+    "tags": ["ai", "mathematics", "research", "collaboration"],
+    "rating": 5
+  },
+  {
+    "url": "https://www.anthropic.com/research/tracing-thoughts-language-model",
+    "title": "Tracing the thoughts of a large language model",
+    "description": "Eksperymenty interpretowalności: od cech do obwodów obliczeniowych wewnątrz LLM.",
+    "tags": ["interpretability", "llm", "safety", "research"],
+    "rating": 3
+  },
+  {
+    "url": "https://alignment.anthropic.com/2025/recommended-directions/",
+    "title": "Recommendations for Technical AI Safety Research Directions",
+    "description": "Lista konkretnych kierunków badań bezpieczeństwa, które mają największy wpływ.",
+    "tags": ["ai-safety", "alignment", "governance", "research"],
+    "rating": null
+  },
+  {
+    "url": "https://alignment.anthropic.com/2025/sabotage-risk-report/",
+    "title": "Anthropic's Summer 2025 Pilot Sabotage Risk Report",
+    "description": "Raport o ryzyku sabotażu/misalignmentu w praktycznych wdrożeniach modeli Claude.",
+    "tags": ["risk", "safety", "evaluation", "policy"],
+    "rating": 1
+  },
+  {
+    "url": "https://hai.stanford.edu/ai-index/2025-ai-index-report",
+    "title": "The 2025 AI Index Report",
+    "description": "Kompendium trendów: inwestycje, osiągi modeli, regulacje, adopcja AI.",
+    "tags": ["ai", "trends", "policy", "economics"],
+    "rating": 5
+  },
+  {
+    "url": "https://spectrum.ieee.org/ai-index-2025",
+    "title": "12 Graphs That Explain the State of AI in 2025",
+    "description": "Skrót AI Index w 12 kluczowych wykresach i komentarzach.",
+    "tags": ["ai", "trends", "data", "overview"],
+    "rating": 2
+  },
+  {
+    "url": "https://www.ft.com/content/31d959cf-a037-4330-8ea9-8d064c9ac613",
+    "title": "AI ‘robot ballet’ promises to choreograph production line gains",
+    "description": "RoboBallet: system RL do koordynacji wielu robotów w przemyśle.",
+    "tags": ["robotics", "rl", "industry", "automation"],
+    "rating": null
+  },
+  {
+    "url": "https://devblogs.microsoft.com/typescript/announcing-typescript-5-6/",
+    "title": "Announcing TypeScript 5.6",
+    "description": "Oficjalne nowości TS 5.6, m.in. poprawki DX i zmiany w wyszukiwaniu tsconfig.",
+    "tags": ["typescript", "ts-5-6", "tooling", "release"],
+    "rating": 4
+  },
+  {
+    "url": "https://effectivetypescript.com/2024/09/30/ts-56/",
+    "title": "Notes on TypeScript 5.6",
+    "description": "Praktyczne omówienie zmian 5.6 z przykładami i niuansami typów.",
+    "tags": ["typescript", "ts-5-6", "clean-code", "tips"],
+    "rating": 1
+  },
+  {
+    "url": "https://piccalil.li/blog/advanced-typescript-manipulation-features-for-the-real-world/",
+    "title": "Advanced TypeScript manipulation features for the real world",
+    "description": "Zaawansowane techniki manipulacji typami z realnymi przykładami.",
+    "tags": ["typescript", "advanced-types", "utility-types", "patterns"],
+    "rating": 5
+  },
+  {
+    "url": "https://softwaremill.com/developing-type-level-algorithms-in-typescript/",
+    "title": "Developing type-level algorithms in TypeScript",
+    "description": "Wprowadzenie do programowania na poziomie typów z algorytmami w TS.",
+    "tags": ["type-level", "algorithms", "metaprogramming", "typescript"],
+    "rating": null
+  },
+  {
+    "url": "https://softwaremill.com/implementing-advanced-type-level-arithmetic-in-typescript-part-1/",
+    "title": "Implementing Advanced Type-Level Arithmetic in TypeScript (Part 1)",
+    "description": "Dodawanie/odejmowanie na poziomie typów — ćwiczenia dla „typing muscles”.",
+    "tags": ["type-level", "generics", "arithmetic", "typescript"],
+    "rating": 3
+  },
+  {
+    "url": "https://softwaremill.com/implementing-advanced-type-level-arithmetic-in-typescript-part-2/",
+    "title": "Implementing Advanced Type-Level Arithmetic in TypeScript (Part 2)",
+    "description": "Kontynuacja: liczby ujemne, ograniczenia i praktyczne wskazówki.",
+    "tags": ["type-level", "metaprogramming", "typescript", "advanced"],
+    "rating": 2
+  },
+  {
+    "url": "https://type-level-typescript.com/",
+    "title": "Type-Level TypeScript",
+    "description": "Seria o programowaniu na typach: od conditional types po własne narzędzia.",
+    "tags": ["type-level", "generics", "tutorial", "typescript"],
+    "rating": null
+  },
+  {
+    "url": "https://www.infoq.com/news/2025/03/typescript-58-released/",
+    "title": "TypeScript 5.8 Released with Improved Inference and Performance",
+    "description": "Podsumowanie releasu 5.8: lepsza inferencja i wydajność.",
+    "tags": ["typescript", "ts-5-8", "release", "performance"],
+    "rating": 5
+  },
+  {
+    "url": "https://devblogs.microsoft.com/typescript/typescript-native-port/",
+    "title": "A 10x Faster TypeScript",
+    "description": "Zapowiedź natywnego portu kompilatora TS i planowanie wersji 6.x.",
+    "tags": ["typescript", "compiler", "performance", "native"],
+    "rating": 4
+  },
+  {
+    "url": "https://devblogs.microsoft.com/typescript/announcing-typescript-5-9/",
+    "title": "Announcing TypeScript 5.9",
+    "description": "Nowości 5.9: m.in. `import defer`, usprawnienia `tsc --init`, Node20 module.",
+    "tags": ["typescript", "ts-5-9", "ecmascript", "release"],
+    "rating": null
+  },
+  {
+    "url": "https://cp-algorithms.com/data_structures/disjoint_set_union.html",
+    "title": "Disjoint Set Union (Union-Find)",
+    "description": "Klasyczny DSU z kompresją ścieżek i union by rank — zastosowania i złożoności.",
+    "tags": ["algorithms", "data-structures", "union-find", "graphs"],
+    "rating": 2
+  },
+  {
+    "url": "https://visualgo.net/en/ufds",
+    "title": "Union-Find Disjoint Sets (UFDS)",
+    "description": "Interaktywna wizualizacja UFDS i jego użycia (np. Kruskal).",
+    "tags": ["visualization", "union-find", "mst", "education"],
+    "rating": 5
+  },
+  {
+    "url": "https://eli.thegreenplace.net/2025/bloom-filters/",
+    "title": "Bloom filters",
+    "description": "Współczesne, klarowne omówienie filtrów Blooma z matematycznym tłem i kodem.",
+    "tags": ["bloom-filter", "hashing", "probabilistic", "data-structures"],
+    "rating": 1
+  },
+  {
+    "url": "https://cp-algorithms.com/data_structures/segment_tree.html",
+    "title": "Segment Tree",
+    "description": "Drzewo przedziałowe do zapytań zakresowych i aktualizacji w O(log n).",
+    "tags": ["segment-tree", "range-queries", "data-structures", "algorithms"],
+    "rating": null
+  },
+  {
+    "url": "https://cp-algorithms.com/graph/breadth-first-search.html",
+    "title": "Breadth-First Search (BFS)",
+    "description": "BFS w grafach nieważonych: najkrótsze ścieżki w O(n+m).",
+    "tags": ["bfs", "graphs", "traversal", "basics"],
+    "rating": 3
+  },
+  {
+    "url": "https://cp-algorithms.com/graph/01_bfs.html",
+    "title": "0-1 BFS",
+    "description": "SSSP w O(|E|) przy wagach {0,1}; kiedy warto zamiast Dijkstry.",
+    "tags": ["shortest-paths", "bfs", "optimization", "graphs"],
+    "rating": 4
+  },
+  {
+    "url": "https://www.quantamagazine.org/new-method-is-the-fastest-way-to-find-the-best-routes-20250806/",
+    "title": "New Method Is the Fastest Way To Find the Best Routes",
+    "description": "Popularnonaukowy opis przełomu: algorytm omijający barierę sortowania w SSSP.",
+    "tags": ["shortest-paths", "theory", "research", "dijkstra"],
+    "rating": null
+  },
+  {
+    "url": "https://arxiv.org/abs/2504.17033",
+    "title": "Breaking the Sorting Barrier for Directed Single-Source Shortest Paths",
+    "description": "ArXiv: deterministyczny algorytm SSSP w O(m·log^{2/3} n) dla grafów skierowanych.",
+    "tags": ["theory", "shortest-paths", "complexity", "research"],
+    "rating": 5
+  },
+  {
+    "url": "https://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html",
+    "title": "Introduction to A*",
+    "description": "Klasyczne, praktyczne wprowadzenie do A* i projektowania heurystyk.",
+    "tags": ["a-star", "heuristics", "pathfinding", "graphs"],
+    "rating": 2
+  },
+  {
+    "url": "https://www.geeksforgeeks.org/dsa/kmp-algorithm-for-pattern-searching/",
+    "title": "KMP Algorithm for Pattern Searching",
+    "description": "Liniowe dopasowanie wzorca dzięki tablicy LPS; zastosowania i implementacje.",
+    "tags": ["kmp", "strings", "pattern-matching", "algorithms"],
+    "rating": null
+  }
+]

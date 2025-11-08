@@ -21,6 +21,7 @@ import { LinkCardSkeletonGrid } from '@/components/skeletons/link-card-skeleton'
 import type { DefaultView } from '@/types'
 import { useLinks } from '@/hooks/queries/use-links'
 import { useUserPreferences } from '@/hooks/queries/use-user'
+import { EmptyState } from '@/components/dashboard/empty-state'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -127,6 +128,11 @@ export default function DashboardPage() {
 
   const hasLinks = searchResult && searchResult.links.length > 0
   const hasActiveFilters = selectedTagIds.length > 0
+
+  // Handler to trigger Add Link dialog from empty state
+  const handleOpenAddLinkDialog = () => {
+    window.dispatchEvent(new Event('keyboard-add-link'))
+  }
 
   return (
     <>
@@ -246,7 +252,7 @@ export default function DashboardPage() {
           {(query || hasActiveFilters) ? (
             <NoResultsState onClearFilters={handleClearFilters} />
           ) : (
-            <EmptyState />
+            <EmptyState onAddLinkClick={handleOpenAddLinkDialog} />
           )}
         </>
       )}
@@ -450,21 +456,6 @@ function LinkCard({
           </div>
       </CardContent>
     </Card>
-  )
-}
-
-function EmptyState() {
-  return (
-    <div className="text-center py-12">
-      <div className="bg-gradient-main rounded-full w-24 h-24 mx-auto mb-4 flex items-center justify-center">
-        <ExternalLink className="h-12 w-12 text-white" />
-      </div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">Brak zapisanych linków</h3>
-      <p className="text-gray-600 mb-4">Rozpocznij organizowanie swoich linków już teraz!</p>
-      <p className="text-sm text-gray-500">
-        Kliknij przycisk "Dodaj link" w górnej części strony, aby dodać swój pierwszy link.
-      </p>
-    </div>
   )
 }
 
