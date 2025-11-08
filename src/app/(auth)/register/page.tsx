@@ -57,12 +57,21 @@ export default function RegisterPage() {
           description: error.message,
           variant: 'destructive',
         })
+        setIsLoading(false)
       } else {
         toast({
           title: 'Sukces!',
           description: 'Konto zostało utworzone. Możesz się teraz zalogować.',
         })
-        router.push('/dashboard')
+
+        // Refresh router to update middleware state
+        router.refresh()
+
+        // Small delay to ensure cookies are set before navigation
+        await new Promise(resolve => setTimeout(resolve, 100))
+
+        // Use window.location for reliable redirect (ensures full page reload)
+        window.location.href = '/dashboard'
       }
     } catch (error) {
       toast({
@@ -70,7 +79,6 @@ export default function RegisterPage() {
         description: 'Wystąpił nieoczekiwany błąd',
         variant: 'destructive',
       })
-    } finally {
       setIsLoading(false)
     }
   }
