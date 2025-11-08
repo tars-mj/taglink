@@ -65,6 +65,24 @@ In the same **URL Configuration** section:
 #### Issue: "Invalid redirect URL"
 **Solution:** Make sure the callback URL is added to Redirect URLs in Supabase Dashboard
 
+#### Issue: Email redirects to localhost:8080 or wrong URL
+**Root Cause:** Old emails were generated BEFORE you updated Site URL in Supabase
+
+**Solution:**
+1. **Delete the test account in Supabase Dashboard:**
+   - Go to Authentication → Users
+   - Find the user and delete them
+2. **Verify Site URL is set to production:**
+   - Go to Authentication → URL Configuration
+   - Site URL should be: `https://taglink-production.up.railway.app`
+   - NOT localhost!
+3. **Verify Redirect URLs include production:**
+   - `https://taglink-production.up.railway.app/auth/callback` should be in the list
+4. **Register a NEW account:**
+   - Use a different email or the same one (after deleting old account)
+   - The new confirmation email will have the correct Railway URL
+5. **Important:** Old emails are NOT updated when you change Site URL - you must register fresh
+
 #### Issue: Infinite loading after clicking email link
 **Solution:**
 - Check browser console for errors
@@ -82,6 +100,9 @@ In the same **URL Configuration** section:
 - Code may have expired (valid for 1 hour)
 - Code may have already been used
 - Request a new verification email
+
+#### Issue: "User from sub claim in JWT does not exist" in Railway logs
+**Solution:** This error is now fixed - middleware was intercepting the callback route before session could be created. The `/auth/callback` route is now excluded from middleware.
 
 ### 5. Email Template Configuration (Optional)
 

@@ -267,14 +267,14 @@ export async function createLink(formData: FormData) {
     user_id: user.id,
     url: url,
     title: truncateString(title || (scrapedData?.success ? (scrapedData.title || scrapedData.ogTitle) : null) || null),
-    ai_description: aiDescription,
-    scraped_content: scrapedData?.success ? scrapedData.scrapedContent : null,
+    ai_description: truncateString(aiDescription, 280), // DB limit: varchar(280)
+    scraped_content: truncateString(scrapedData?.success ? scrapedData.scrapedContent : null, 3000), // DB limit: varchar(3000)
     domain: scrapedData?.success ? scrapedData.domain : null,
     rating: rating || null,
     ai_processing_status: scrapedData?.success ? 'completed' : 'failed',
     ai_processing_started_at: new Date().toISOString(),
     ai_processing_completed_at: new Date().toISOString(),
-    ai_processing_error: aiProcessingError,
+    ai_processing_error: truncateString(aiProcessingError, 500), // DB limit: varchar(500)
   }
 
   // Insert link with all metadata already populated
@@ -343,8 +343,8 @@ export async function updateLink(data: z.infer<typeof updateLinkSchema>) {
   const { error: updateError } = await supabase
     .from('links')
     .update({
-      title: data.title,
-      ai_description: data.ai_description,
+      title: truncateString(data.title),
+      ai_description: truncateString(data.ai_description, 280),
       rating: data.rating,
     })
     .eq('id', data.id)

@@ -164,8 +164,8 @@ export async function loadSampleData() {
         const linkData = {
           user_id: user.id,
           url: item.url,
-          title: truncateString(item.title),
-          ai_description: truncateString(item.description),
+          title: truncateString(item.title, 500), // DB limit: varchar(500)
+          ai_description: truncateString(item.description, 280), // DB limit: varchar(280)
           domain: extractDomain(item.url),
           rating: item.rating,
           // Mark as completed so AI processing doesn't trigger
