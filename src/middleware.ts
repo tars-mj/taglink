@@ -2,6 +2,12 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  // Check if Supabase env vars are set
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    console.error('Missing Supabase environment variables in middleware')
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -9,8 +15,8 @@ export async function middleware(request: NextRequest) {
   })
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         get(name: string) {
@@ -54,7 +60,17 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const { data, error } = await supabase.auth.getUser()
+    if (error) {
+      console.error('Supabase auth error in middleware:', error.message)
+    }
+    user = data.user
+  } catch (error) {
+    console.error('Failed to get user in middleware:', error)
+    // Continue without user - protected routes will redirect to login
+  }
 
   // Protected routes
   if (request.nextUrl.pathname.startsWith('/dashboard') ||
