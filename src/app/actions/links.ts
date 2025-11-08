@@ -266,6 +266,7 @@ export async function createLink(formData: FormData) {
   const linkData = {
     user_id: user.id,
     url: url,
+    normalized_url: url.toLowerCase(), // Required for uniqueness checks
     title: truncateString(title || (scrapedData?.success ? (scrapedData.title || scrapedData.ogTitle) : null) || null),
     ai_description: truncateString(aiDescription, 280), // DB limit: varchar(280)
     scraped_content: truncateString(scrapedData?.success ? scrapedData.scrapedContent : null, 3000), // DB limit: varchar(3000)

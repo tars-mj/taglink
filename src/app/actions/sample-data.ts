@@ -164,6 +164,7 @@ export async function loadSampleData() {
         const linkData = {
           user_id: user.id,
           url: item.url,
+          normalized_url: item.url.toLowerCase(), // Required for uniqueness checks
           title: truncateString(item.title, 500), // DB limit: varchar(500)
           ai_description: truncateString(item.description, 280), // DB limit: varchar(280)
           domain: extractDomain(item.url),
