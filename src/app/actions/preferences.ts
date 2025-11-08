@@ -60,7 +60,7 @@ export async function updateUserPreferences(formData: FormData) {
 
   // Remove undefined values
   const updateData = Object.fromEntries(
-    Object.entries(rawData).filter(([_, v]) => v !== undefined)
+    Object.entries(rawData).filter(([, v]) => v !== undefined)
   )
 
   const validated = updatePreferencesSchema.safeParse(updateData)

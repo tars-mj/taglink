@@ -1,7 +1,6 @@
 'use server'
 
 import { createServerActionClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
 // Validation schemas
@@ -152,13 +151,24 @@ export async function exportUserData(format: 'json' | 'csv' | 'markdown') {
     return { success: false, error: 'Failed to export data' }
   }
 
+  // Define types for the export data
+  type LinkTag = { tags?: { name: string } | null }
+  type LinkWithTags = {
+    url: string
+    title: string | null
+    ai_description: string | null
+    rating: number | null
+    link_tags?: LinkTag[] | null
+    created_at: string
+  }
+
   // Transform data for export
-  const exportData = links.map((link: any) => ({
+  const exportData = (links as LinkWithTags[]).map((link) => ({
     url: link.url,
     title: link.title,
     description: link.ai_description,
     rating: link.rating,
-    tags: link.link_tags?.map((lt: any) => lt.tags?.name).filter(Boolean) || [],
+    tags: link.link_tags?.map((lt) => lt.tags?.name).filter(Boolean) || [],
     created: link.created_at,
   }))
 
@@ -177,8 +187,8 @@ export async function exportUserData(format: 'json' | 'csv' | 'markdown') {
       // CSV header
       output = 'URL,Title,Description,Rating,Tags,Created\n'
       // CSV rows
-      output += exportData.map((item: any) =>
-        `"${item.url}","${item.title || ''}","${item.description || ''}",${item.rating || ''},"${item.tags.join('; ')}","${item.created}"`
+      output += exportData.map((item) =>
+        `"${item.url}","${item.title || ''}","${item.description || ''}",${item.rating || ''},"${(item.tags as string[]).join('; ')}","${item.created}"`
       ).join('\n')
       mimeType = 'text/csv'
       filename = `taglink-export-${Date.now()}.csv`
@@ -189,12 +199,12 @@ export async function exportUserData(format: 'json' | 'csv' | 'markdown') {
       output += `Exported: ${new Date().toISOString()}\n\n`
       output += `Total Links: ${exportData.length}\n\n---\n\n`
 
-      exportData.forEach((item: any, index: number) => {
+      exportData.forEach((item, index) => {
         output += `## ${index + 1}. ${item.title || 'Untitled'}\n\n`
         output += `**URL:** ${item.url}\n\n`
         if (item.description) output += `**Description:** ${item.description}\n\n`
         if (item.rating) output += `**Rating:** ${'⭐'.repeat(item.rating)}\n\n`
-        if (item.tags.length > 0) output += `**Tags:** ${item.tags.join(', ')}\n\n`
+        if ((item.tags as string[]).length > 0) output += `**Tags:** ${(item.tags as string[]).join(', ')}\n\n`
         output += `**Created:** ${new Date(item.created).toLocaleString()}\n\n`
         output += '---\n\n'
       })
