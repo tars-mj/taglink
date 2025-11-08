@@ -223,22 +223,22 @@ export async function suggestTags(
 
     // Call AI with structured output
     const responseContent = await callAI({
-      systemPrompt: `You are an expert content analyst that suggests ONLY relevant tags for web content.
+      systemPrompt: `You are an expert content analyst that suggests relevant tags for web content.
 Your task:
 - Carefully analyze the webpage content, title, and URL
-- Select ONLY tags that are DIRECTLY relevant to the main topics discussed
-- Return 1-5 highly relevant tags (quality over quantity)
-- If content is about TypeScript and SQL, ONLY select "typescript" and "sql" tags
-- If content is about fashion autumn collection, ONLY select "fashion" and "autumn" tags
-- DO NOT select tags just because they exist - they must match the content
+- Select tags that are relevant to the topics discussed
+- Return 3-5 relevant tags when possible (aim for comprehensive coverage)
+- Include tags for: main technology, topic category, content type, related concepts
+- If content is about TypeScript and SQL, select "typescript", "sql", "programming", "database" if available
+- If content is about fashion autumn collection, select "fashion", "autumn", "clothing", "style" if available
 - DO NOT create new tags, ONLY use provided tag IDs
-- Better to return 1-2 accurate tags than 5-10 irrelevant ones
+- Try to provide at least 3 tags unless content is very specific
 
-Output format: {"tag_ids": ["id1", "id2"]}
+Output format: {"tag_ids": ["id1", "id2", "id3"]}
 
-CRITICAL: Return valid JSON only. ONLY include tags that directly relate to the content's main topics.`,
-      userPrompt: `Analyze this webpage and suggest 1-5 ONLY TRULY RELEVANT tags from my existing tags.
-Focus on the MAIN TOPICS of the content. Ignore unrelated tags.
+CRITICAL: Return valid JSON only. Aim for 3-5 tags that comprehensively describe the content.`,
+      userPrompt: `Analyze this webpage and suggest 3-5 RELEVANT tags from my existing tags.
+Cover different aspects: main topic, technology, category, purpose.
 
 Webpage content:
 ${context}
@@ -248,7 +248,7 @@ URL: ${content.url}
 Available tags (ID: name):
 ${tagList}
 
-Return JSON with tag_ids array containing 1-5 tag IDs that match the MAIN TOPICS ONLY.`,
+Return JSON with tag_ids array containing 3-5 tag IDs that comprehensively describe the content.`,
       maxTokens: 200,
       temperature: 0.3,
       requireJson: true,
@@ -298,10 +298,10 @@ Return JSON with tag_ids array containing 1-5 tag IDs that match the MAIN TOPICS
 
 /**
  * Generate new tags when no existing tags match the content
- * Creates exactly 2 highly relevant tags (max 2 words each)
+ * Creates 3-5 highly relevant tags (max 2 words each)
  *
  * @param content - Page content for analysis
- * @returns 2 new tag names (not IDs) or empty array on error
+ * @returns 3-5 new tag names (not IDs) or empty array on error
  */
 export async function generateNewTags(
   content: {
@@ -336,37 +336,37 @@ export async function generateNewTags(
       systemPrompt: `You are an expert content analyst that generates highly relevant tags for web content.
 Your task:
 - Carefully analyze the webpage content, title, and URL
-- Generate EXACTLY 2 tags that capture the MAIN TOPICS
+- Generate MINIMUM 3 tags, MAXIMUM 5 tags that capture ALL important aspects
 - Each tag must be 1-2 words maximum
 - Tags must be in ENGLISH
 - Tags must be lowercase, simple keywords
+- Tags should cover different aspects: technology, topic, purpose, category
 - Tags should be generic and widely applicable (e.g., "javascript", "web development", "machine learning")
 - DO NOT use special characters, only letters, numbers, spaces, hyphens
 
 Examples of GOOD tags:
-- "javascript"
-- "web development"
-- "machine learning"
-- "react"
-- "backend"
+- "javascript", "tutorial", "web development" (for JS tutorial)
+- "react", "frontend", "components", "javascript" (for React article)
+- "python", "data science", "pandas", "tutorial" (for data science guide)
 
 Examples of BAD tags:
 - "how to build a website" (too long)
 - "JavaScript Framework Tutorial" (not lowercase, too specific)
 - "react.js/next.js" (special characters)
 
-Output format: {"tags": ["tag1", "tag2"]}
+Output format: {"tags": ["tag1", "tag2", "tag3", "tag4", "tag5"]}
 
-CRITICAL: Return valid JSON with EXACTLY 2 tags. Each tag: 1-2 words, lowercase, English.`,
-      userPrompt: `Analyze this webpage and generate EXACTLY 2 highly relevant tags (1-2 words each, lowercase, English).
+CRITICAL: Return valid JSON with MINIMUM 3, MAXIMUM 5 tags. Each tag: 1-2 words, lowercase, English.`,
+      userPrompt: `Analyze this webpage and generate MINIMUM 3, MAXIMUM 5 highly relevant tags (1-2 words each, lowercase, English).
+Think about: main technology, topic category, content type, purpose, and key concepts.
 
 Webpage content:
 ${context}
 
 URL: ${content.url}
 
-Return JSON with exactly 2 tags that represent the MAIN TOPICS of this content.`,
-      maxTokens: 100,
+Return JSON with 3-5 tags that represent ALL IMPORTANT ASPECTS of this content.`,
+      maxTokens: 150,
       temperature: 0.3,
       requireJson: true,
     })
@@ -409,10 +409,11 @@ Return JSON with exactly 2 tags that represent the MAIN TOPICS of this content.`
 
         return true
       })
-      .slice(0, 2) // Ensure exactly max 2 tags
+      .slice(0, 5) // Ensure max 5 tags
 
-    if (validatedTags.length === 0) {
-      return { success: false, error: 'AI generated invalid tags' }
+    // Require minimum 3 tags
+    if (validatedTags.length < 3) {
+      return { success: false, error: 'AI generated too few tags (minimum 3 required)' }
     }
 
     return { success: true, tagNames: validatedTags }
