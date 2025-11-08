@@ -1,6 +1,6 @@
 'use server'
 
-import { createServerActionClient } from '@/lib/supabase/server'
+import { createServerActionClient, createAdminClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
 // Validation schemas
@@ -263,13 +263,22 @@ export async function deleteUserAccount(confirmation: string) {
     return { success: false, error: 'Failed to delete user data' }
   }
 
-  // Delete auth account (this will sign the user out)
-  const { error: deleteError } = await supabase.auth.admin.deleteUser(user.id)
+  // Delete auth account using admin client (requires service_role key)
+  try {
+    const adminClient = createAdminClient()
+    const { error: deleteError } = await adminClient.auth.admin.deleteUser(user.id)
 
-  if (deleteError) {
-    console.error('Error deleting account:', deleteError)
-    return { success: false, error: 'Failed to delete account' }
+    if (deleteError) {
+      console.error('Error deleting account:', deleteError)
+      return { success: false, error: 'Failed to delete account' }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error creating admin client:', error)
+    return {
+      success: false,
+      error: 'Account deletion is not configured. Please contact support.'
+    }
   }
-
-  return { success: true }
 }
