@@ -1,0 +1,15 @@
+.my-docs
+.claude
+.next/
+tsconfig.tsbuildinfo
+
+# Test coverage and reports
+coverage/
+playwright-report/
+test-results/
+e2e/.auth/
+
+# Vitest
+.vitest/
+node_modules/.git.backup
+node_modules
