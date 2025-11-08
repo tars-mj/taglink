@@ -223,34 +223,42 @@ export async function suggestTags(
 
     // Call AI with structured output
     const responseContent = await callAI({
-      systemPrompt: `You are an expert content analyst that suggests relevant tags for web content.
-Your task:
-- Carefully analyze the webpage content, title, and URL
-- Select tags that are relevant to the topics discussed
-- Return 3-5 relevant tags when possible (aim for comprehensive coverage)
-- Include tags for: main technology, topic category, content type, related concepts
-- If content is about TypeScript and SQL, select "typescript", "sql", "programming", "database" if available
-- If content is about fashion autumn collection, select "fashion", "autumn", "clothing", "style" if available
-- DO NOT create new tags, ONLY use provided tag IDs
-- Try to provide at least 3 tags unless content is very specific
+      systemPrompt: `You are an expert content analyst that MUST suggest multiple relevant tags for web content.
 
-Output format: {"tag_ids": ["id1", "id2", "id3"]}
+MANDATORY REQUIREMENTS:
+- You MUST return MINIMUM 3 tags, ideally 4-5 tags
+- Analyze ALL aspects: technology, category, purpose, type, concepts
+- Be COMPREHENSIVE - better to include more relevant tags than too few
+- If you return less than 3 tags, the system will FAIL
 
-CRITICAL: Return valid JSON only. Aim for 3-5 tags that comprehensively describe the content.`,
-      userPrompt: `Analyze this webpage and suggest 3-5 RELEVANT tags from my existing tags.
-Cover different aspects: main topic, technology, category, purpose.
+Tag selection strategy:
+1. Primary topic/technology (e.g., "react", "python")
+2. Category/domain (e.g., "frontend", "backend", "database")
+3. Content type (e.g., "tutorial", "documentation", "article")
+4. Related concepts (e.g., "javascript", "web development")
+5. Secondary topics mentioned
 
-Webpage content:
+Output format: {"tag_ids": ["id1", "id2", "id3", "id4", "id5"]}
+
+CRITICAL: You MUST return AT LEAST 3 tag IDs. Returning less than 3 is a FAILURE.`,
+      userPrompt: `IMPORTANT: You MUST select MINIMUM 3 tags from the available tags below.
+
+Analyze this webpage and select 3-5 tags that best describe it:
 ${context}
 
 URL: ${content.url}
 
-Available tags (ID: name):
+AVAILABLE TAGS TO CHOOSE FROM:
 ${tagList}
 
-Return JSON with tag_ids array containing 3-5 tag IDs that comprehensively describe the content.`,
+REMEMBER:
+- Select AT LEAST 3 tags (returning less is a FAILURE)
+- Look for tags matching: main topic, technology, category, type, related concepts
+- Be generous with tag selection - better to tag comprehensively
+
+Return JSON with AT LEAST 3 tag IDs from the list above.`,
       maxTokens: 200,
-      temperature: 0.3,
+      temperature: 0.5,
       requireJson: true,
     })
 
@@ -333,41 +341,46 @@ export async function generateNewTags(
 
     // Call AI to generate new tags
     const responseContent = await callAI({
-      systemPrompt: `You are an expert content analyst that generates highly relevant tags for web content.
-Your task:
-- Carefully analyze the webpage content, title, and URL
-- Generate MINIMUM 3 tags, MAXIMUM 5 tags that capture ALL important aspects
-- Each tag must be 1-2 words maximum
-- Tags must be in ENGLISH
-- Tags must be lowercase, simple keywords
-- Tags should cover different aspects: technology, topic, purpose, category
-- Tags should be generic and widely applicable (e.g., "javascript", "web development", "machine learning")
-- DO NOT use special characters, only letters, numbers, spaces, hyphens
+      systemPrompt: `You are a tag generation expert. Your task is MANDATORY: generate EXACTLY 3-5 tags.
 
-Examples of GOOD tags:
-- "javascript", "tutorial", "web development" (for JS tutorial)
-- "react", "frontend", "components", "javascript" (for React article)
-- "python", "data science", "pandas", "tutorial" (for data science guide)
+STRICT REQUIREMENTS:
+- You MUST generate MINIMUM 3 tags (NEVER less)
+- Maximum 5 tags
+- Each tag: 1-2 words, lowercase, English only
+- NO special characters (only letters, numbers, spaces, hyphens)
 
-Examples of BAD tags:
-- "how to build a website" (too long)
-- "JavaScript Framework Tutorial" (not lowercase, too specific)
-- "react.js/next.js" (special characters)
+TAG GENERATION STRATEGY (generate tags for ALL these aspects):
+1. Main technology/tool (e.g., "react", "python", "docker")
+2. Category/domain (e.g., "frontend", "backend", "devops")
+3. Content type (e.g., "tutorial", "guide", "documentation")
+4. Purpose/use case (e.g., "automation", "analytics", "security")
+5. Related concept (e.g., "programming", "web", "database")
 
-Output format: {"tags": ["tag1", "tag2", "tag3", "tag4", "tag5"]}
+GOOD examples:
+- React article: ["react", "frontend", "javascript", "tutorial", "web"]
+- Python data guide: ["python", "data science", "tutorial", "analytics", "programming"]
+- Docker tutorial: ["docker", "devops", "containers", "tutorial", "deployment"]
 
-CRITICAL: Return valid JSON with MINIMUM 3, MAXIMUM 5 tags. Each tag: 1-2 words, lowercase, English.`,
-      userPrompt: `Analyze this webpage and generate MINIMUM 3, MAXIMUM 5 highly relevant tags (1-2 words each, lowercase, English).
-Think about: main technology, topic category, content type, purpose, and key concepts.
+Output: {"tags": ["tag1", "tag2", "tag3", "tag4", "tag5"]}
 
-Webpage content:
+FAILURE CONDITION: Returning less than 3 tags will cause system failure!`,
+      userPrompt: `MANDATORY: Generate AT LEAST 3 tags for this webpage (never less than 3!).
+
+Content to analyze:
 ${context}
 
 URL: ${content.url}
 
-Return JSON with 3-5 tags that represent ALL IMPORTANT ASPECTS of this content.`,
+INSTRUCTIONS:
+1. Identify the main topic/technology
+2. Identify the category (frontend/backend/data/devops/etc)
+3. Identify the content type (tutorial/article/documentation/tool/etc)
+4. Add 1-2 more relevant tags
+
+YOU MUST RETURN AT LEAST 3 TAGS! Less than 3 is unacceptable.
+Return JSON with 3-5 tags, each 1-2 words, lowercase, English.`,
       maxTokens: 150,
-      temperature: 0.3,
+      temperature: 0.5,
       requireJson: true,
     })
 
