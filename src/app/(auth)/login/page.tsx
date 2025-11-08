@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,8 +15,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { toast } = useToast()
   const supabase = createClient()
+
+  // Show error from callback if present
+  useEffect(() => {
+    const error = searchParams.get('error')
+    if (error === 'verification_failed') {
+      toast({
+        title: 'Błąd weryfikacji',
+        description: 'Nie udało się potwierdzić adresu email. Spróbuj ponownie.',
+        variant: 'destructive',
+      })
+    } else if (error === 'no_code') {
+      toast({
+        title: 'Błąd weryfikacji',
+        description: 'Nieprawidłowy link weryfikacyjny.',
+        variant: 'destructive',
+      })
+    }
+  }, [searchParams, toast])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

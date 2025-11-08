@@ -6,6 +6,11 @@ import type { NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const next = requestUrl.searchParams.get('next') ?? '/dashboard'
+
+  console.log('[Auth Callback] Processing callback request')
+  console.log('[Auth Callback] Code present:', !!code)
+  console.log('[Auth Callback] Next URL:', next)
 
   if (code) {
     const cookieStore = await cookies()
@@ -27,14 +32,20 @@ export async function GET(request: NextRequest) {
       }
     )
 
+    console.log('[Auth Callback] Exchanging code for session...')
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
-      // Redirect to dashboard after successful email confirmation
-      return NextResponse.redirect(new URL('/dashboard', request.url))
+    if (error) {
+      console.error('[Auth Callback] Error exchanging code:', error.message)
+      return NextResponse.redirect(new URL('/login?error=verification_failed', request.url))
     }
+
+    console.log('[Auth Callback] Successfully exchanged code, redirecting to:', next)
+    // Redirect to dashboard after successful email confirmation
+    return NextResponse.redirect(new URL(next, request.url))
   }
 
-  // Return the user to an error page with some instructions
-  return NextResponse.redirect(new URL('/login?error=verification_failed', request.url))
+  console.error('[Auth Callback] No code provided in callback')
+  // Return the user to login with error
+  return NextResponse.redirect(new URL('/login?error=no_code', request.url))
 }
