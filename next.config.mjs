@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+    // Run ESLint on these directories during production builds
+    dirs: ['src', 'e2e'],
+  },
   images: {
     remotePatterns: [
       {
