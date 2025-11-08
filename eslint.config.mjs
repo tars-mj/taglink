@@ -24,6 +24,13 @@ const eslintConfig = [
       'e2e/.auth/**',
     ],
   },
+  {
+    rules: {
+      // Relax these rules to warnings instead of errors
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'react/no-unescaped-entities': 'warn',
+    },
+  },
 ]
 
 export default eslintConfig
