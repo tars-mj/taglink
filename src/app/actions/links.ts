@@ -9,6 +9,17 @@ import type { z } from 'zod'
 import { generateNewTags } from '@/lib/ai/openrouter'
 
 /**
+ * Helper function to truncate string to max length
+ * @param str - String to truncate
+ * @param maxLength - Maximum length (default 500 for database varchar(500))
+ * @returns Truncated string
+ */
+function truncateString(str: string | null | undefined, maxLength: number = 500): string | null {
+  if (!str) return null
+  return str.length > maxLength ? str.substring(0, maxLength) : str
+}
+
+/**
  * Helper function to create tags from AI-generated tag names
  * - Validates each tag (max 2 words)
  * - Checks if tag already exists (case-insensitive)
@@ -255,7 +266,7 @@ export async function createLink(formData: FormData) {
   const linkData = {
     user_id: user.id,
     url: url,
-    title: title || (scrapedData?.success ? (scrapedData.title || scrapedData.ogTitle) : null) || null,
+    title: truncateString(title || (scrapedData?.success ? (scrapedData.title || scrapedData.ogTitle) : null) || null),
     ai_description: aiDescription,
     scraped_content: scrapedData?.success ? scrapedData.scrapedContent : null,
     domain: scrapedData?.success ? scrapedData.domain : null,
