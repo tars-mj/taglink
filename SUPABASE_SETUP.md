@@ -24,10 +24,12 @@ http://localhost:3001/auth/callback
 http://localhost:3002/auth/callback
 ```
 
-**For Production (when deployed):**
+**For Production (Railway):**
 ```
-https://yourdomain.com/auth/callback
+https://taglink.up.railway.app/auth/callback
 ```
+
+**⚠️ Important:** Add **ALL** URLs above (both localhost and Railway) so email verification works in both environments!
 
 5. Click **Save**
 
@@ -35,9 +37,9 @@ https://yourdomain.com/auth/callback
 
 In the same **URL Configuration** section:
 
-- **Site URL**: Set to your main domain
-  - Local: `http://localhost:3000`
-  - Production: `https://yourdomain.com`
+- **Site URL**: Set to your production domain
+  - **Production**: `https://taglink.up.railway.app`
+  - Note: For local development, Supabase will use localhost URLs automatically
 
 ### 3. Test Email Confirmation
 
@@ -94,11 +96,13 @@ To customize the confirmation email:
 **Development (localhost):**
 - Use `http://localhost:3000/auth/callback` (or 3001, 3002 based on port)
 - Email confirmation works the same as production
+- Register test accounts locally
 
-**Production:**
-- Use `https://yourdomain.com/auth/callback`
-- Make sure SSL is properly configured
+**Production (Railway):**
+- Use `https://taglink.up.railway.app/auth/callback`
+- SSL is automatically configured by Railway
 - Test with a real email (not temporary/throwaway)
+- Users register on production URL
 
 ### 7. Disable Email Confirmation (Dev Only)
 
