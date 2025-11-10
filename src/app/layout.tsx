@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" suppressHydrationWarning className="overflow-y-scroll">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         <QueryProvider>
           {children}
           <Toaster />
