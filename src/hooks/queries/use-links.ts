@@ -77,10 +77,12 @@ export function useUpdateLink() {
       }
       return result
     },
-    onSuccess: () => {
-      // Invalidate queries to refetch updated data
-      queryClient.invalidateQueries({ queryKey: queryKeys.links.all })
-      queryClient.invalidateQueries({ queryKey: queryKeys.links.statistics })
+    onSuccess: async () => {
+      // Invalidate queries to refetch updated data - await to ensure data is refreshed
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.links.all }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.links.statistics })
+      ])
 
       toast({
         title: 'Link Updated',

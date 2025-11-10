@@ -15,11 +15,10 @@ import { LinkStatisticsPanel } from '@/components/statistics/link-statistics'
 import { type SortOption } from '@/app/actions/search'
 import { Skeleton } from '@/components/ui/skeleton'
 import { StarRating } from '@/components/ui/star-rating'
-import { updateLink } from '@/app/actions/links'
 import { useToast } from '@/hooks/use-toast'
 import { LinkCardSkeletonGrid } from '@/components/skeletons/link-card-skeleton'
 import type { DefaultView } from '@/types'
-import { useLinks } from '@/hooks/queries/use-links'
+import { useLinks, useUpdateLink } from '@/hooks/queries/use-links'
 import { useUserPreferences } from '@/hooks/queries/use-user'
 import { EmptyState } from '@/components/dashboard/empty-state'
 
@@ -271,7 +270,7 @@ function LinkCard({
   viewMode?: DefaultView
 }) {
   const [localRating, setLocalRating] = useState(link.rating || null)
-  const [isPending, startTransition] = useTransition()
+  const updateLinkMutation = useUpdateLink()
   const { toast } = useToast()
 
   const handleRatingChange = async (newRating: number | null) => {
@@ -280,31 +279,23 @@ function LinkCard({
     // Optimistically update UI
     setLocalRating(newRating)
 
-    startTransition(async () => {
-      const result = await updateLink({
+    updateLinkMutation.mutate(
+      {
         id: link.id,
         rating: newRating,
-      })
-
-      if (result.success) {
-        toast({
-          title: 'Rating updated',
-          description: newRating
-            ? `Set to ${newRating} star${newRating !== 1 ? 's' : ''}`
-            : 'Rating cleared',
-        })
-        // Refetch to update cache
-        onRefetch()
-      } else {
-        // Rollback on error
-        setLocalRating(previousRating)
-        toast({
-          title: 'Error',
-          description: result.error || 'Failed to update rating',
-          variant: 'destructive',
-        })
+      },
+      {
+        onError: () => {
+          // Rollback on error
+          setLocalRating(previousRating)
+          toast({
+            title: 'Error',
+            description: 'Failed to update rating',
+            variant: 'destructive',
+          })
+        }
       }
-    })
+    )
   }
 
   // List view - compact horizontal layout
@@ -356,7 +347,7 @@ function LinkCard({
                 value={localRating}
                 onChange={handleRatingChange}
                 size="sm"
-                className={isPending ? 'opacity-50 pointer-events-none' : ''}
+                className={updateLinkMutation.isPending ? 'opacity-50 pointer-events-none' : ''}
               />
             </div>
 
@@ -435,7 +426,7 @@ function LinkCard({
               value={localRating}
               onChange={handleRatingChange}
               size="sm"
-              className={isPending ? 'opacity-50 pointer-events-none' : ''}
+              className={updateLinkMutation.isPending ? 'opacity-50 pointer-events-none' : ''}
             />
 
             {/* Status */}

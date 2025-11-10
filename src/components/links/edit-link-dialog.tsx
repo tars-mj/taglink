@@ -41,9 +41,14 @@ export function EditLinkDialog({ link, onSuccess }: EditLinkDialogProps) {
   // Load user's tags and set initial selection
   useEffect(() => {
     if (open) {
+      // Reset form to initial values when dialog opens
+      setTitle(link.title || '')
+      setDescription(link.ai_description || '')
+      setRating(link.rating || null)
+      setSelectedTagIds([]) // Reset tags before loading
       loadTags()
     }
-  }, [open])
+  }, [open, link])
 
   const loadTags = async () => {
     setIsLoadingTags(true)
@@ -53,7 +58,14 @@ export function EditLinkDialog({ link, onSuccess }: EditLinkDialogProps) {
       setAvailableTags(result.data)
 
       // Set initially selected tags from link
-      if (link.tags && link.tags.length > 0) {
+      // Support both structures: link.tags and link.link_tags[].tag
+      if (link.link_tags && link.link_tags.length > 0) {
+        const linkTagIds = link.link_tags
+          .filter((linkTag) => linkTag.tag)
+          .map((linkTag) => linkTag.tag.id)
+        setSelectedTagIds(linkTagIds)
+      } else if (link.tags && link.tags.length > 0) {
+        // Fallback to old structure
         const linkTagIds = link.tags.map((tag) => tag.id)
         setSelectedTagIds(linkTagIds)
       }

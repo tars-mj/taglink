@@ -9,6 +9,9 @@ export type LinkStatus = 'pending' | 'processing' | 'completed' | 'failed'
 
 export interface LinkWithTags extends Link {
   tags?: Tag[]
+  link_tags?: Array<{
+    tag: Tag
+  }>
 }
 
 export interface TagWithCount extends Tag {

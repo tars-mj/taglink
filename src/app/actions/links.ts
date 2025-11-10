@@ -319,6 +319,16 @@ export async function createLink(formData: FormData) {
   return { success: true, data: newLink }
 }
 
+// Helper function to remove undefined values from objects
+function removeUndefined<T extends Record<string, any>>(obj: T): Partial<T> {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    if (value !== undefined) {
+      acc[key as keyof T] = value
+    }
+    return acc
+  }, {} as Partial<T>)
+}
+
 export async function updateLink(data: z.infer<typeof updateLinkSchema>) {
   const supabase = await createServerActionClient()
 
@@ -341,15 +351,24 @@ export async function updateLink(data: z.infer<typeof updateLinkSchema>) {
     }
   }
 
+  // Build update object with only defined fields
+  const { id, ...fieldsToUpdate } = data
+  const updateData = removeUndefined({
+    title: fieldsToUpdate.title ? truncateString(fieldsToUpdate.title) : undefined,
+    ai_description: fieldsToUpdate.ai_description ? truncateString(fieldsToUpdate.ai_description, 280) : undefined,
+    rating: fieldsToUpdate.rating,
+  })
+
+  // Check if there's anything to update
+  if (Object.keys(updateData).length === 0) {
+    return { success: false, error: 'No fields to update' }
+  }
+
   // Update link
   const { error: updateError } = await supabase
     .from('links')
-    .update({
-      title: truncateString(data.title),
-      ai_description: truncateString(data.ai_description, 280),
-      rating: data.rating,
-    })
-    .eq('id', data.id)
+    .update(updateData)
+    .eq('id', id)
     .eq('user_id', user.id)
 
   if (updateError) {
